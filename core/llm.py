@@ -3,11 +3,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-MODEL_NAME = "gemini-2.5-flash"
+MODEL_NAME = "gemini-2.5-flash-lite"
 
 def get_model_config():
-    """Returns the shared model configuration for all agents."""
-    return {
-        "model": MODEL_NAME,
-        "api_key": os.getenv("GOOGLE_API_KEY")
-    }
+    """Returns the model name string for all agents."""
+    return MODEL_NAME

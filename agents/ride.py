@@ -1,15 +1,17 @@
 from google.adk.agents.llm_agent import Agent
-from typing import TypedDict,  Annotated, Literal
+from typing import Literal
+from pydantic import BaseModel, Field
 from tools.payment_processing import process_payment_tool
 from tools.feedback_logging_tool import log_feedback_tool
 
-class RideState(TypedDict):
-    ride_id: Annotated[str, "The unique identifier for the ride."]
-    user_id: Annotated[str, "The unique identifier for the user."]
-    driver_id: Annotated[str, "The unique identifier for the driver."]
-    fare: Annotated[float, "The total cost of the ride."]
-    feedback_score: Annotated[int, "A rating score from 1 to 5."]
-    feedback_text: Annotated[str, "Detailed comments or feedback from the user."]
+
+class RideState(BaseModel):
+    ride_id: str = Field(..., description="The unique identifier for the ride.")
+    user_id: str = Field(..., description="The unique identifier for the user.")
+    driver_id: str = Field(..., description="The unique identifier for the driver.")
+    fare: float = Field(..., description="The total cost of the ride.")
+    feedback_score: int = Field(..., description="A rating score from 1 to 5.")
+    feedback_text: str = Field(..., description="Detailed comments or feedback from the user.")
     status: Literal["approved", "rejected", "pending"]
 
 post_ride_agent = Agent(
@@ -31,19 +33,16 @@ post_ride_agent = Agent(
 
 accept_ride_agent = Agent(
     name="accept_ride_agent",
-    description="Accepts or rejects ride requests.",
+    description="Handles the confirmation and booking of a matched ride.",
     instruction="""
     You are the Accept Ride Agent for the ColCommute system.
     
     Your responsibilities include:
-    1. Accepting or rejecting ride requests.
-    2. Updating the ride history and marking the commute instance as completed.
-    3. Payment Settlement: Trigger fare calculation and payment splitting among co-riders.
-    4. Carbon Savings Calculation: Compute the estimated carbon footprint saved by carpooling and update user stats.
+    1. Confirming ride details with the user and driver.
+    2. Booking the ride slot once both parties agree.
+    3. Informing the orchestrator of the final booking status.
     
-    Ensure all post-ride cleanup tasks are completed successfully before marking the state as done.
+    Ensure clear communication during the booking phase.
     """,
-    tools=[process_payment_tool, log_feedback_tool],
-    response_schema=RideState, 
-    
+    output_schema=RideState
 )

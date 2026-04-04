@@ -1,7 +1,7 @@
 """ADK function tools for ride matching — thin wrappers around ``services.ride_services``."""
 
 from __future__ import annotations
-from typing import Optional
+from typing import Optional, Annotated
 from services import ride_services as rs
 
 
