@@ -10,9 +10,17 @@ from agents.demand_prediction import demand_prediction_agent
 from agents.notification import notification_agent
 from google.adk.agents import LlmAgent
 from typing import TypedDict, List, Dict, Any
+from agents.ride import accept_ride_agent
 
-
-
+class RideState(TypedDict):
+    user_id: str
+    pickup: str
+    destination: str
+    time: str
+    matches: List[Dict[str, Any]]
+    route: Dict[str, Any]
+    pricing: Dict[str, Any]
+    notifications: List[str]
 
 
 
@@ -25,6 +33,7 @@ orchestrator = Agent(
         routing_tool,
         pricing_tool,
         notification_tool,
+        accept_ride_agent,
     ],
     
     instruction="""
@@ -39,20 +48,10 @@ orchestrator = Agent(
     Always follow this sequence:
     ride_matching → routing → pricing → notification
     """,
+    response_schema=RideState,
 )
 
 
 
 
 
-class RideState(TypedDict):
-    user_id: str
-    pickup: str
-    destination: str
-    time: str
-    
-    matches: List[Dict[str, Any]]
-    route: Dict[str, Any]
-    pricing: Dict[str, Any]
-    
-    notifications: List[str]
