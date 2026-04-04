@@ -1,2 +1,2 @@
-from agents.orchestrator import root_orchestrator
+from agents.orchestrator import orchestrator as root_orchestrator
 
