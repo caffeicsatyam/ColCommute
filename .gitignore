@@ -1,4 +1,28 @@
+# Secrets — never commit
 .env
-venv
-__pycache__/*
-.adk/*
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/
+
+# ADK local session & tooling cache (not application source)
+**/.adk/
