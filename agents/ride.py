@@ -1,9 +1,9 @@
 from google.adk.agents.llm_agent import Agent
-from typing import TypedDict, List, Dict, Any, Annotated, Literal
+from typing import TypedDict,  Annotated, Literal
 from tools.payment_processing import process_payment_tool
 from tools.feedback_logging_tool import log_feedback_tool
 
-class NotificationState(TypedDict):
+class RideState(TypedDict):
     ride_id: Annotated[str, "The unique identifier for the ride."]
     user_id: Annotated[str, "The unique identifier for the user."]
     driver_id: Annotated[str, "The unique identifier for the driver."]
@@ -12,12 +12,12 @@ class NotificationState(TypedDict):
     feedback_text: Annotated[str, "Detailed comments or feedback from the user."]
     status: Literal["approved", "rejected", "pending"]
 
-notification_agent = Agent(
-    name="notification_agent",
+post_ride_agent = Agent(
+    name="post_ride_agent",
     description="Manages post-ride activities such as processing feedback, splitting payments, and logging ride history.",
     tools=[process_payment_tool, log_feedback_tool],
     instruction="""
-    You are the Notification Agent for the ColCommute system.
+    You are the Post-Ride Agent for the ColCommute system.
     
     Your responsibilities include:
     1. Processing Post-Ride Feedback: Analyze user feedback and ratings. If there are any negative experiences, flag them for review.
@@ -26,6 +26,24 @@ notification_agent = Agent(
     4. Carbon Savings Calculation: Compute the estimated carbon footprint saved by carpooling and update user stats.
     
     Ensure all post-ride cleanup tasks are completed successfully before marking the state as done.
+    """
+)
+
+accept_ride_agent = Agent(
+    name="accept_ride_agent",
+    description="Accepts or rejects ride requests.",
+    instruction="""
+    You are the Accept Ride Agent for the ColCommute system.
+    
+    Your responsibilities include:
+    1. Accepting or rejecting ride requests.
+    2. Updating the ride history and marking the commute instance as completed.
+    3. Payment Settlement: Trigger fare calculation and payment splitting among co-riders.
+    4. Carbon Savings Calculation: Compute the estimated carbon footprint saved by carpooling and update user stats.
+    
+    Ensure all post-ride cleanup tasks are completed successfully before marking the state as done.
     """,
-    response_schema=NotificationState
+    tools=[process_payment_tool, log_feedback_tool],
+    response_schema=RideState, 
+    
 )
