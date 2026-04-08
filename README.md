@@ -1,16 +1,24 @@
 # <div align="center">ColCommute</div>
 
 <p align="center">
-  <img src="static/WhatsApp%20Image%202026-04-08%20at%2001.49.23.jpeg" alt="ColCommute banner" width="720">
+  <img src="static/col-commute.png" alt="ColCommute banner" width="720">
 </p>
 
 <p align="center">
   AI-assisted campus commute matching for student carpooling.
 </p>
 
+<h1 align="center">Demo Video</h1>
+
+<p align="center">
+  <a href="https://www.youtube.com/watch?si=5pJwvEAxJU4H8cxm&v=KPgxonRG-CQ&feature=youtu.be"><strong>Watch on YouTube</strong></a><br/>
+  <em>Note: the voice in the video is low — please use headphones.</em>
+</p>
+
 <p align="center">
   <a href="#goal"><strong>Goal</strong></a> |
   <a href="#key-features"><strong>Key Features</strong></a> |
+  <a href="#screenshots"><strong>Screenshots</strong></a> |
   <a href="#getting-started"><strong>Getting Started</strong></a> |
   <a href="#running-colcommute"><strong>Running ColCommute</strong></a> |
   <a href="#project-structure"><strong>Project Structure</strong></a>
@@ -36,6 +44,18 @@ The platform uses Google ADK agents, FastAPI, PostgreSQL, and Google Maps servic
 8. Fare splitting helpers
 9. ADK-powered orchestration for ride coordination and chat flows
 10. Separate frontend and backend apps for product iteration
+
+---
+
+## Screenshots
+
+<p align="center">
+  <img src="static/main-chat.png" alt="Chat-driven ride coordination UI" width="820">
+</p>
+
+<p align="center">
+  <img src="static/mock.png" alt="Commute matching and trip flow screens" width="820">
+</p>
 
 ---
 
