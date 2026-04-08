@@ -1,0 +1,40 @@
+steps:
+  # Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/colcommute-backend', '.']
+    dir: 'backend'
+
+  # Push the image to Artifact Registry (GCR)
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/colcommute-backend']
+    dir: 'backend'
+
+  # Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'colcommute-backend'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/colcommute-backend'
+      - '--region'
+      - 'us-central1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      # Note: Sensitivity variables should be managed via Substitutions in the Trigger UI
+      - '--set-env-vars'
+      - 'DATABASE_URL=${_DATABASE_URL},GOOGLE_API_KEY=${_GOOGLE_API_KEY},GOOGLE_MAPS_API_KEY=${_GOOGLE_MAPS_API_KEY},JWT_SECRET_KEY=${_JWT_SECRET_KEY}'
+
+images:
+  - 'gcr.io/$PROJECT_ID/colcommute-backend'
+
+substitutions:
+  _DATABASE_URL: 'CHANGE_ME'
+  _GOOGLE_API_KEY: 'CHANGE_ME'
+  _GOOGLE_MAPS_API_KEY: 'CHANGE_ME'
+  _JWT_SECRET_KEY: 'CHANGE_ME'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
